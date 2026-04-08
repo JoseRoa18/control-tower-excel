@@ -21,6 +21,9 @@ def generate():
         # 2. Configurar los encabezados para la API de Anthropic
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         
+        # --- AÑADIDO: IMPRIMIR EN LOS LOGS DE RAILWAY ---
+        print(f"DEBUG - LLAVE DETECTADA: {api_key}", flush=True)
+        
         if not api_key:
             return jsonify({"error": "La variable de entorno ANTHROPIC_API_KEY no está configurada en el servidor."}), 500
 
@@ -44,7 +47,7 @@ def generate():
         
         # 5. Manejar posibles errores de la API de Anthropic
         if response.status_code != 200:
-             print(f"Error de Anthropic API: {response.status_code} - {response.text}")
+             print(f"Error de Anthropic API: {response.status_code} - {response.text}", flush=True)
              return jsonify({
                  "error": "Error al comunicarse con Claude",
                  "details": response.json()
@@ -55,7 +58,7 @@ def generate():
         return jsonify(response_data)
 
     except Exception as e:
-        print(f"Error interno del servidor: {str(e)}")
+        print(f"Error interno del servidor: {str(e)}", flush=True)
         return jsonify({"error": "Error interno del servidor", "details": str(e)}), 500
 
 if __name__ == '__main__':
